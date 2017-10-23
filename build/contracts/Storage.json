@@ -103,8 +103,27 @@
       "links": {},
       "address": "0x26b4afb60d6c903165150c6f0aa14f8016be4aec",
       "updated_at": 1508794020333
+    },
+    "1508802050311": {
+      "events": {
+        "0xa5df061c255877ba735ae12735880629e530bcf2d8f7b17da8e7c7be4a364284": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "_ipfsHash",
+              "type": "string"
+            }
+          ],
+          "name": "StorageAdded",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xcfeb869f69431e42cdb54a4f4f105c19c080a601",
+      "updated_at": 1508802082453
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1508794020333
+  "updated_at": 1508802082453
 }

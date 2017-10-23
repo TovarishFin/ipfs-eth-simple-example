@@ -56,10 +56,8 @@ window.App = {
         storage = instance
         return storage.ipfsHash.call()
       }).then(value => {
-        console.log(value)
         const currentIpfsHashElement = document.getElementById('currentIpfsHash')
         currentIpfsHashElement.src = `http://gateway.ipfs.io/ipfs/${value.valueOf()}`
-        console.log(currentIpfsHashElement)
       }).catch(error => {
         console.error(error)
         this.setStatus('Error getting currentIpfsHash; see log.')
@@ -70,7 +68,6 @@ window.App = {
   handleImageChange: function (event) {
     const files = event.target.files
     const fileReader = new window.FileReader()
-    console.log(this)
     fileReader.onloadend = () => App.saveToIpfs(fileReader)
     fileReader.readAsArrayBuffer(files[0])
   },
