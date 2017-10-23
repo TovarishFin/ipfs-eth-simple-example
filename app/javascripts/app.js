@@ -2,6 +2,7 @@
 import '../stylesheets/app.css'
 
 // Import libraries we need.
+import IPFS from 'ipfs'
 import { default as Web3 } from 'web3'
 import { default as contract } from 'truffle-contract'
 
@@ -9,23 +10,23 @@ import { default as contract } from 'truffle-contract'
 import storageArtifacts from '../../build/contracts/Storage.json'
 
 // Storage is our usable abstraction, which we'll use through the code below.
-var Storage = contract(storageArtifacts)
+const Storage = contract(storageArtifacts)
+const node = new IPFS()
 
 // The following code is simple to show off interacting with your contracts.
 // As your needs grow you will likely need to change its form and structure.
 // For application bootstrapping, check out window.addEventListener below.
-var accounts
-var account
+let account
+let accounts
+let newInputHash
 
 window.App = {
   start: function () {
-    var self = this
-
     // Bootstrap the Storage abstraction for Use.
-    Storage.setProvider(web3.currentProvider)
+    Storage.setProvider(window.web3.currentProvider)
 
     // Get the initial account currentIpfsHash so it can be displayed.
-    web3.eth.getAccounts((err, accs) => {
+    window.web3.eth.getAccounts((err, accs) => {
       if (err != null) {
         alert('There was an error fetching your accounts.')
         return
@@ -39,53 +40,66 @@ window.App = {
       accounts = accs
       account = accounts[0]
 
-      self.refreshHash()
+      this.refreshHash()
     })
   },
 
   setStatus: message => {
-    var status = document.getElementById('status')
+    const status = document.getElementById('status')
     status.innerHTML = message
   },
 
-  refreshHash:() => {
-    var self = this
-
-    var storage
+  refreshHash: function () {
+    let storage
     setTimeout(() => {
       Storage.deployed().then(instance => {
         storage = instance
         return storage.ipfsHash.call()
       }).then(value => {
         console.log(value)
-        var currentIpfsHashElement = document.getElementById('currentIpfsHash')
+        const currentIpfsHashElement = document.getElementById('currentIpfsHash')
         currentIpfsHashElement.src = `http://gateway.ipfs.io/ipfs/${value.valueOf()}`
         console.log(currentIpfsHashElement)
       }).catch(error => {
         console.error(error)
-        self.setStatus('Error getting currentIpfsHash; see log.')
+        this.setStatus('Error getting currentIpfsHash; see log.')
       })
-    }, 3000)
+    }, 5000)
   },
 
-  setStorage: () => {
-    var self = this
+  handleImageChange: function (event) {
+    const files = event.target.files
+    const fileReader = new window.FileReader()
+    console.log(this)
+    fileReader.onloadend = () => App.saveToIpfs(fileReader)
+    fileReader.readAsArrayBuffer(files[0])
+  },
 
-    var newIpfsHash = document.getElementById('newIpfsHash').value
-    // var receiver = document.getElementById('receiver').value
+  saveToIpfs: function (reader) {
+    const buffer = Buffer.from(reader.result)
+    node.files.add([{ content: buffer, path: '/test.jpg' }])
+      .then(res => {
+        newInputHash = res[0].hash
+      })
+  },
 
-    this.setStatus('Initiating transaction... (please wait)')
+  setStorage: function () {
+    let storage
+    const newIpfsHash = document.getElementById('newIpfsHash').value
 
-    var storage
     Storage.deployed().then(instance => {
       storage = instance
-      return storage.setStorage(newIpfsHash, { from: account })
+      if (newIpfsHash) {
+        return storage.setStorage(newIpfsHash, { from: account })
+      } else {
+        storage.setStorage(newInputHash, { from: account })
+      }
     }).then(() => {
-      self.setStatus('Transaction complete!')
-      self.refreshHash()
+      this.setStatus('Transaction complete!')
+      this.refreshHash()
     }).catch(error => {
       console.error(error)
-      self.setStatus('Error sending coin; see log.')
+      this.setStatus('Error sending coin; see log.')
     })
   }
 }

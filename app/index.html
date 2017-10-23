@@ -19,8 +19,14 @@
     and back to the original: QmSUfCtXgb59G9tczrz2WuHNAbecV55KRBGXBbZkou5RtE
   </p>
   <br><label for="newIpfsHash">ipfsHash:</label><input type="text" id="newIpfsHash" placeholder="put hash here..."></input>
-  <br><br><button id="send" onclick="App.setStorage()">Set Storage</button>
+
   <br><br>
+  <p>
+    or directly put a file...
+  </p>
+  <br><label for="fileInput">file (image):</label><input type="file" id="fileInput" onChange="App.handleImageChange.call(this, event)"></input>
+  <br><br>
+  <br><br><button id="send" onclick="App.setStorage()">Set Storage</button>
   <span id="status"></span>
   <br>
   <span class="hint"><strong>Hint:</strong> open the browser developer console to view any errors and warnings.</span>
