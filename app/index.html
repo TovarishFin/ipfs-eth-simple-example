@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Storage Example</title>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <script src="./app.js"></script>
+</head>
+<body>
+  <h1>Storage Contract</h1>
+  <h2>Example Storage Dapp</h2>
+  <img style="max-width:400px;" id="currentIpfsHash" />
+
+  <br>
+  <h1>Set Storage</h1>
+  <p>
+    try setting the hash to this: Qmd286K6pohQcTKYqnS1YhWrCiS4gz7Xi34sdwMe9USZ7u
+  </p>
+  <p>
+    and back to the original: QmSUfCtXgb59G9tczrz2WuHNAbecV55KRBGXBbZkou5RtE
+  </p>
+  <br><label for="newIpfsHash">ipfsHash:</label><input type="text" id="newIpfsHash" placeholder="put hash here..."></input>
+  <br><br><button id="send" onclick="App.setStorage()">Set Storage</button>
+  <br><br>
+  <span id="status"></span>
+  <br>
+  <span class="hint"><strong>Hint:</strong> open the browser developer console to view any errors and warnings.</span>
+</body>
+</html>
