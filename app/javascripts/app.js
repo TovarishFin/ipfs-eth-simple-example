@@ -51,18 +51,16 @@ window.App = {
 
   refreshHash: function () {
     let storage
-    setTimeout(() => {
-      Storage.deployed().then(instance => {
-        storage = instance
-        return storage.ipfsHash.call()
-      }).then(value => {
-        const currentIpfsHashElement = document.getElementById('currentIpfsHash')
-        currentIpfsHashElement.src = `http://gateway.ipfs.io/ipfs/${value.valueOf()}`
-      }).catch(error => {
-        console.error(error)
-        this.setStatus('Error getting currentIpfsHash; see log.')
-      })
-    }, 5000)
+    Storage.deployed().then(instance => {
+      storage = instance
+      return storage.ipfsHash.call()
+    }).then(value => {
+      const currentIpfsHashElement = document.getElementById('currentIpfsHash')
+      currentIpfsHashElement.src = `http://gateway.ipfs.io/ipfs/${value.valueOf()}`
+    }).catch(error => {
+      console.error(error)
+      this.setStatus('Error getting currentIpfsHash; see log.')
+    })
   },
 
   handleImageChange: function (event) {
