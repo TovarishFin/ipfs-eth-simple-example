@@ -5,7 +5,10 @@
   "scripts": {
     "lint": "eslint ./",
     "build": "webpack",
-    "dev": "webpack-dev-server"
+    "start:dev": "webpack-dev-server",
+    "start:blockchain": "yarn ganache-cli -d -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'",
+    "migrate:dev": "yarn truffle migrate --network development --reset",
+    "clean:contracts": "rimraf build/contracts"
   },
   "author": "Douglas von Kohorn",
   "license": "MIT",
@@ -26,15 +29,18 @@
     "eslint-plugin-mocha": "^4.8.0",
     "eslint-plugin-promise": "^3.0.0",
     "eslint-plugin-standard": "^2.0.0",
+    "ganache-cli": "^6.0.3",
     "html-webpack-plugin": "^2.28.0",
     "json-loader": "^0.5.4",
+    "rimraf": "^2.6.2",
     "style-loader": "^0.13.1",
+    "truffle": "^4.0.6",
     "truffle-contract": "^1.1.11",
     "web3": "^0.20.0",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.3.0"
   },
   "dependencies": {
-    "ipfs": "^0.26.0"
+    "ipfs": "^0.27.7"
   }
 }

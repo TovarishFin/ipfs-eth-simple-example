@@ -3,8 +3,8 @@ import '../stylesheets/app.css'
 
 // Import libraries we need.
 import IPFS from 'ipfs'
-import { default as Web3 } from 'web3'
-import { default as contract } from 'truffle-contract'
+import Web3 from 'web3'
+import contract from 'truffle-contract'
 
 // Import our contract artifacts and turn them into usable abstractions.
 import storageArtifacts from '../../build/contracts/Storage.json'
@@ -19,8 +19,8 @@ const node = new IPFS()
 let account
 let accounts
 let newInputHash
-
-window.App = {
+let app
+window.app = app = {
   start: function () {
     // Bootstrap the Storage abstraction for Use.
     Storage.setProvider(window.web3.currentProvider)
@@ -66,15 +66,17 @@ window.App = {
   handleImageChange: function (event) {
     const files = event.target.files
     const fileReader = new window.FileReader()
-    fileReader.onloadend = () => App.saveToIpfs(fileReader)
+    fileReader.onloadend = () => app.saveToIpfs(fileReader)
     fileReader.readAsArrayBuffer(files[0])
   },
 
   saveToIpfs: function (reader) {
+    console.log(reader.result)
     const buffer = Buffer.from(reader.result)
-    node.files.add([{ content: buffer, path: '/test.jpg' }])
+    node.files.add({ content: buffer, path: '/test.jpg' })
       .then(res => {
         newInputHash = res[0].hash
+        console.log(`https://ipfs.io/ipfs/${newInputHash}`)
       })
   },
 
@@ -111,5 +113,5 @@ window.addEventListener('load', () => {
     window.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
   }
 
-  App.start()
+  app.start()
 })
